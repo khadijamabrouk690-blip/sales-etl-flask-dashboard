@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Dashboard</title>
+    <!-- استدعاء خط Cairo الاحترافي مع أيكونات FontAwesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --primary-color: #2563eb;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .header p {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        /* الجدول الرئيسي */
+        .table-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: right;
+        }
+
+        thead {
+            background-color: #f1f5f9;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        th {
+            padding: 16px 20px;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        td {
+            padding: 16px 20px;
+            font-size: 15px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-main);
+        }
+
+        tbody tr:hover {
+            background-color: #f8fafc;
+            transition: background-color 0.2s ease;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .price-tag {
+            font-weight: 600;
+            color: #059669;
+            background-color: #ecfdf5;
+            padding: 4px 8px;
+            border-radius: 6px;
+            display: inline-block;
+        }
+
+        .badge-id {
+            font-weight: 600;
+            color: var(--primary-color);
+            background-color: #eff6ff;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- الهيدر -->
+        <div class="header">
+            <div>
+                <h1>لوحة عرض المبيعات | Sales Dashboard</h1>
+                <p>عرض تفصيلي للبيانات المسترجعة من SQL Server</p>
+            </div>
+        </div>
+
+        <!-- جدول البيانات -->
+        <div class="table-card">
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>رقم الطلب (Order ID)</th>
+                            <th>العميل (Customer)</th>
+                            <th>المنتج (Product)</th>
+                            <th>الكمية (Quantity)</th>
+                            <th>سعر الوحدة (Unit Price)</th>
+                            <th>الإجمالي (Total Price)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in sales %}
+                        <tr>
+                            <td><span class="badge-id">#{{ row.order_id }}</span></td>
+                            <td><strong>{{ row.customer }}</strong></td>
+                            <td>{{ row.product }}</td>
+                            <td>{{ row.quantity }}</td>
+                            <td>${{ "%.2f"|format(row.unit_price) }}</td>
+                            <td><span class="price-tag">${{ "%.2f"|format(row.total_price) }}</span></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
